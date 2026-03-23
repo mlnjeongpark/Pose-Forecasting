@@ -2,7 +2,8 @@
 .vscode/
 log/
 __MACOSX/
-data/
+data/AMASS_CMUsubset
+data/VPoserModelFiles
 saved_model/
 wandb/
 *.out
