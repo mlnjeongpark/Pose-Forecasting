@@ -8,9 +8,12 @@ TRAIN:
   LOSS_W: [1, 0.01]
 
 DATA:
-  OBS: 15
-  PRED: 30
+  OBS: 60
+  PRED: 90
   STRIDE: 1
+
+MODEL:
+  NAME: 'diff'
 
 TRANSFORMER:
   LAYER: 8
