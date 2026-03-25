@@ -1,11 +1,19 @@
 """
-CUDA_VISIBLE_DEVICES=0 nohup python train.py --obs 15 --pred 30 > mlp.log &
-CUDA_VISIBLE_DEVICES=0 nohup python train.py --obs 30 --pred 30 > mlp.log &
-CUDA_VISIBLE_DEVICES=0 nohup python train.py --obs 30 --pred 60 > mlp.log &
-CUDA_VISIBLE_DEVICES=0 nohup python train.py --obs 30 --pred 90 > mlp.log &
-CUDA_VISIBLE_DEVICES=0 nohup python train.py --obs 60 --pred 90 > mlp.log & 
-CUDA_VISIBLE_DEVICES=0 nohup python train.py --obs 30 --pred 30 --model diff > diff.log & 
-CUDA_VISIBLE_DEVICES=0 nohup python train.py --obs 30 --pred 30 --model rnn > rnn.log & 
+CUDA_VISIBLE_DEVICES=0 nohup python train.py --obs 15 --pred 30 --model mlp --layer 3 --dim 128 > mlp.log &
+CUDA_VISIBLE_DEVICES=0 nohup python train.py --obs 30 --pred 30 --model mlp --layer 3 --dim 128 > mlp.log &
+CUDA_VISIBLE_DEVICES=0 nohup python train.py --obs 30 --pred 60 --model mlp --layer 3 --dim 128 > mlp.log &
+CUDA_VISIBLE_DEVICES=0 nohup python train.py --obs 30 --pred 90 --model mlp --layer 3 --dim 128 > mlp.log &
+CUDA_VISIBLE_DEVICES=0 nohup python train.py --obs 60 --pred 90 --model mlp --layer 3 --dim 128 > mlp.log & 
+CUDA_VISIBLE_DEVICES=1 nohup python train.py --obs 15 --pred 30 --model rnn --layer 1 --dim 256 > rnn.log & 
+CUDA_VISIBLE_DEVICES=7 nohup python train.py --obs 30 --pred 30 --model rnn --layer 1 --dim 256 > rnn.log & 
+CUDA_VISIBLE_DEVICES=8 nohup python train.py --obs 30 --pred 60 --model rnn --layer 1 --dim 256 > rnn.log & 
+CUDA_VISIBLE_DEVICES=9 nohup python train.py --obs 30 --pred 90 --model rnn --layer 1 --dim 256 > rnn.log & 
+CUDA_VISIBLE_DEVICES=1 nohup python train.py --obs 60 --pred 90 --model rnn --layer 1 --dim 256 > rnn.log & 
+CUDA_VISIBLE_DEVICES=2 nohup python train.py --obs 15 --pred 30 --model transformer > transformer.log & 
+CUDA_VISIBLE_DEVICES=3 nohup python train.py --obs 30 --pred 30 --model transformer > transformer.log & 
+CUDA_VISIBLE_DEVICES=4 nohup python train.py --obs 30 --pred 60 --model transformer > transformer.log & 
+CUDA_VISIBLE_DEVICES=5 nohup python train.py --obs 30 --pred 90 --model transformer > transformer.log & 
+CUDA_VISIBLE_DEVICES=6 nohup python train.py --obs 60 --pred 90 --model transformer > transformer.log & 
 
 """
 
@@ -37,6 +45,7 @@ from batch_engine import train, eval
 set_seed(123)
 
 def main(cfg, args):
+    cur_time = time_str()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print('device is', device)
     # if torch.cuda.is_available():
@@ -47,7 +56,7 @@ def main(cfg, args):
                 # ,mode="disabled"
             )
 
-    wandb.run.name = f'lr-{cfg.TRAIN.LR}_wd-{cfg.TRAIN.WD}'
+    wandb.run.name = f'layer{cfg.TRANSFORMER.LAYER}-dim{cfg.TRANSFORMER.EMBED}-lr-{cfg.TRAIN.LR}_wd-{cfg.TRAIN.WD}-{cur_time}'
 
     total_epoch = cfg.TRAIN.EPOCH
     save_path = os.path.join('saved_model',f'{cfg.MODEL.NAME}', f'{cfg.DATA.OBS}_{cfg.DATA.PRED}' ,time_str())
@@ -120,6 +129,7 @@ def main(cfg, args):
         pose_dim=63,
         latent_dim=32,
         hidden_dim=cfg.TRANSFORMER.EMBED,
+        n_layer=cfg.TRANSFORMER.LAYER,
         )
         model = PoseRNN(vp, config).to(device)
 

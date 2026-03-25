@@ -9,7 +9,7 @@ def l1l2_loss(pred_latent, gt_latent, reg_weight=0.01):
     """
     
     # 1. Smooth L1 Loss (Huber Loss)
-    recon_loss = F.smooth_l1_loss(pred_latent, gt_latent, beta=0.0001)
+    recon_loss = F.smooth_l1_loss(pred_latent, gt_latent, beta=0.05)
     
     # 2. Latent Regularization (L2 Penalty)
     reg_loss = torch.mean(pred_latent ** 2)

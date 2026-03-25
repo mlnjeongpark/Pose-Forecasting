@@ -46,10 +46,8 @@ class ConstantVelocity(nn.Module):
         if obs.shape[1] < 2:
             raise ValueError("Need at least 2 frames to compute velocity")
 
-        # velocity 계산
         v = obs[:, -1, :] - obs[:, -2, :]   # (B, D)
 
-        # 시작점
         cur = obs[:, -1, :]   # (B, D)
 
         if targets is not None:

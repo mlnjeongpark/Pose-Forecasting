@@ -133,7 +133,6 @@ def main(cfg, args):
 
             pred_pose = model(obs)
 
-
             gt_list.append(targets.cpu().numpy())
             pred_list.append(pred_pose.cpu().detach().numpy())
         
