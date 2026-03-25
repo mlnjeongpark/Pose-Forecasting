@@ -41,6 +41,7 @@ python train.py --model constant        # constant-velocity
 python train.py --model mlp              # mlp
 python train.py --model rnn             # rnn
 python train.py --model transformer     # transformer
+python train.py --model diff             # diffusion transformer
 
 ```
 
